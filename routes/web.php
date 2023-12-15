@@ -2,45 +2,23 @@
 
 use Illuminate\Support\Facades\Route;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use App\Http\Controllers\PenyiarController;
+use App\Http\Controllers\MusikController;
+use App\Http\Controllers\SiaranController;
+use App\Http\Controllers\JadwalController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\IklanController;
 
-Route::get('/admin', function () {
-    return view('index');
-});
-
-Route::get('/siaran', function () {
-    return view('siaran');
-});
-
-Route::get('/iklan', function () {
-    return view('iklan');
-});
-
-Route::get('/musik', function () {
-    return view('musik');
-});
-
-Route::get('/tambahJadwal', function () {
-    return view('tambahJadwal');
-});
-
-Route::get('/tambahSiaran', function () {
-    return view('tambahSiaran');
-});
-
-Route::get('/penyiar', function () {
-    return view('penyiar');
-});
-
-Route::get('/login', function () {
+Route::get('/', function () {
     return view('login');
+})->name('login');
+Route::post('/', [AdminController::class, 'login'])->name('loginpost');
+Route::get('logout', [AdminController::class, 'logout'])->name('logout');
+
+Route::group(['middleware' => ['auth']], function () { 
+    Route::resource('penyiar', PenyiarController::class);
+    Route::resource('musik', MusikController::class);
+    Route::resource('siaran', SiaranController::class);
+    Route::resource('jadwal', JadwalController::class);
+    Route::resource('iklan', IklanController::class);
 });
